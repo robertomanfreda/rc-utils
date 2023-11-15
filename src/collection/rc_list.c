@@ -3,11 +3,11 @@
 //
 
 #include <stdio.h>
-#include "../include/list.h"
-#include "../include/memory_wrapper.h"
+#include "../include/rc_list.h"
+#include "../include/rc_memory.h"
 
 List *list_create() {
-    List *list = rc_malloc(sizeof(List));
+    List *list = memory_malloc(sizeof(List));
 
     if (list == NULL) {
         fprintf(stderr, "ERROR - %s: Unable to allocate memory.\n", __func__);
@@ -55,11 +55,11 @@ void list_destroy(List *list) {
     while (current != NULL) {
         NodeList *temp = current;
         current = current->next;
-        rc_free(temp, sizeof(NodeList)); // Free the node
+        memory_free(temp, sizeof(NodeList)); // Free the node
     }
 
     // Free the list structure itself
-    rc_free(list, sizeof(List));
+    memory_free(list, sizeof(List));
 }
 
 void list_clear(List **list) {
@@ -72,7 +72,7 @@ void list_clear(List **list) {
 }
 
 void list_append(List *list, int data) {
-    NodeList *node = (NodeList *) rc_malloc(sizeof(NodeList));
+    NodeList *node = (NodeList *) memory_malloc(sizeof(NodeList));
 
     if (node == NULL) {
         fprintf(stderr, "ERROR - %s: Unable to allocate memory for node.\n", __func__);
@@ -98,7 +98,7 @@ void list_append(List *list, int data) {
 }
 
 void list_prepend(List *list, int data) {
-    NodeList *node = (NodeList *) rc_malloc(sizeof(NodeList));
+    NodeList *node = (NodeList *) memory_malloc(sizeof(NodeList));
 
     if (node == NULL) {
         fprintf(stderr, "ERROR - %s: Unable to allocate memory for node.\n", __func__);

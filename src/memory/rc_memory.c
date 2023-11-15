@@ -2,13 +2,13 @@
 // Created by roberto on 11/14/23.
 //
 
-#include "../include/memory_wrapper.h"
+#include "../include/rc_memory.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void *rc_malloc(size_t size) {
+void *memory_malloc(size_t size) {
     void *ptr = malloc(size);
     if (ptr != NULL) {
         totalAllocated += size;
@@ -16,7 +16,7 @@ void *rc_malloc(size_t size) {
     return ptr;
 }
 
-void rc_free(void *ptr, size_t size) {
+void memory_free(void *ptr, size_t size) {
     if (ptr != NULL) {
         totalFreed += size;
     }
@@ -24,7 +24,7 @@ void rc_free(void *ptr, size_t size) {
     free(ptr);
 }
 
-void rc_print_memory_usage(const char *custom_marker) {
+void memory_print_usage(const char *custom_marker) {
     const char *msg = "-------------- Memory Report: %s --------------";
     printf(msg, custom_marker);
     printf("\n");

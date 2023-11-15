@@ -4,8 +4,8 @@ project(rcutils C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(rcutils main.c
-        src/collection/list.c
-        src/include/list.h
-        src/memory/memory_wrapper.c
-        src/include/memory_wrapper.h
+        src/collection/rc_list.c
+        src/include/rc_list.h
+        src/memory/rc_memory.c
+        src/include/rc_memory.h
 )

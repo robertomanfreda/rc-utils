@@ -1,5 +1,5 @@
-#include "src/include/list.h"
-#include "src/include/memory_wrapper.h"
+#include "src/include/rc_list.h"
+#include "src/include/rc_memory.h"
 
 int main() {
     List *list = list_create();
@@ -41,6 +41,6 @@ int main() {
     list_destroy(list);
     list_destroy(listCopy);
 
-    rc_print_memory_usage("END");
+    memory_print_usage("END");
     return 0;
 }

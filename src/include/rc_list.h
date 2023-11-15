@@ -2,8 +2,8 @@
 // Created by roberto on 11/10/23.
 //
 
-#ifndef RCUTILS_LIST_H
-#define RCUTILS_LIST_H
+#ifndef RCUTILS_RC_LIST_H
+#define RCUTILS_RC_LIST_H
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -175,4 +175,4 @@ void list_sort_descending(List *list);
 void list_get_sublist(List *list);
  */
 
-#endif //RCUTILS_LIST_H
+#endif //RCUTILS_RC_LIST_H
