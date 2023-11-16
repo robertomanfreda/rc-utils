@@ -366,6 +366,9 @@ int main() {
 
     mem_check();
 
-    printf("All list_append tests passed!\n");
+    memory_print_usage("list");
+
+    printf("All list tests passed!\n");
+
     return 0;
 }

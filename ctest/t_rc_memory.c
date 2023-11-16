@@ -50,6 +50,9 @@ int main() {
     test_memory_free();
     test_memory_allocation_and_freeing();
 
+    memory_print_usage("memory management");
+
     printf("All memory management tests passed!\n");
+
     return 0;
 }
