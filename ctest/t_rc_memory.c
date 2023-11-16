@@ -8,7 +8,6 @@
 #include "t_utils.h"
 
 void test_memory_malloc() {
-
     printf("Executing: %s\n", __func__);
 
     size_t size = 100;
