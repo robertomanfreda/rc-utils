@@ -139,6 +139,24 @@ void test_list_destroy() {
     mem_check();
 }
 
+void test_list_clear() {
+    printf("Executing: %s\n", __func__);
+
+    List *list = list_create(TYPE_STRING);
+    list_append(list, (char *) sData1);
+    list_append(list, (char *) sData2);
+    list_print(list);
+
+    list_clear(&list);
+    list_print(list);
+
+    assert(list_is_empty(list) == true);
+
+    list_destroy(list);
+
+    mem_check();
+}
+
 void test_list_append_empty() {
     printf("Executing: %s\n", __func__);
 
@@ -311,6 +329,8 @@ int main() {
     t_list_get_element_at_index_out_of_bounds();
 
     test_list_destroy();
+
+    test_list_clear();
 
     test_list_append_empty();
     test_list_append_non_empty();
