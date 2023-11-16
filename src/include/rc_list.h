@@ -51,6 +51,18 @@ List *list_create(DataType dataType);
  */
 List *list_deep_copy(const List *source);
 
+/**
+ * Retrieves the element at the specified index from the list.
+ *
+ * This function traverses the list to the specified index and returns
+ * the element at that position. If the list is NULL, the index is out
+ * of bounds, or if the index is negative, the function returns NULL.
+ *
+ * @param list Pointer to the List from which the element is to be retrieved.
+ * @param index The zero-based index of the element to retrieve.
+ * @return Pointer to the element at the specified index, or NULL if the index
+ *         is out of bounds, the list is NULL, or the list does not contain enough elements.
+ */
 void *list_get_element_at(const List *list, int index);
 
 /**
