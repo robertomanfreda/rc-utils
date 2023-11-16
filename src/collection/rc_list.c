@@ -43,6 +43,26 @@ List *list_deep_copy(const List *source) {
     return copy;
 }
 
+void *list_get_element_at(const List *list, int index) {
+    if (list_is_null_check(list, __func__)) return NULL;
+    if (list_is_empty_check(list, __func__)) return NULL;
+
+    if (list->size - 1 < index) {
+        fprintf(stdout, "WARN - %s: Index %dd is out of bounds\n", __func__, index);
+        return NULL;
+    }
+
+    NodeList *current = list->head;
+    int currentIndex = 0;
+
+    while (current != NULL && currentIndex < index) {
+        current = current->next;
+        currentIndex++;
+    }
+
+    return current->data;
+}
+
 void list_destroy(List *list) {
     if (list_is_null_check(list, __func__)) return;
 

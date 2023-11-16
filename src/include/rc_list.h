@@ -51,6 +51,8 @@ List *list_create(DataType dataType);
  */
 List *list_deep_copy(const List *source);
 
+void *list_get_element_at(const List *list, int index);
+
 /**
  * Destroys the list, freeing memory for all nodes and the list itself.
  *
