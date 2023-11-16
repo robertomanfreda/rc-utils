@@ -6,7 +6,7 @@
 #include "../include/rc_list.h"
 #include "../include/rc_memory.h"
 
-List *list_create() {
+List *list_create(DataType dataType) {
     List *list = memory_malloc(sizeof(List));
 
     if (list == NULL) {
@@ -16,6 +16,7 @@ List *list_create() {
 
     list->size = 0;
     list->head = NULL;
+    list->dataType = dataType;
 
     return list;
 }
@@ -25,7 +26,7 @@ List *list_deep_copy(const List *source) {
     if (list_is_empty_check(source, __func__)) return NULL;
 
     // Create a new list
-    List *copy = list_create();
+    List *copy = list_create(source->dataType);
     if (copy == NULL) {
         fprintf(stderr, "ERROR - %s: Unable to allocate memory for list.\n", __func__);
         return NULL;
@@ -62,8 +63,11 @@ void list_clear(List **list) {
     if (list_is_null_check(*list, __func__)) return;
     if (list_is_empty_check(*list, __func__)) return;
 
+    // Extract dataType from the List structure
+    DataType dataType = (*list)->dataType;
+
     list_destroy(*list);    // Free the entire list
-    *list = list_create();  // Re-create the list and update the original pointer
+    *list = list_create(dataType);  // Re-create the list and update the original pointer
 }
 
 void list_append(List *list, void *data) {
@@ -161,28 +165,42 @@ void list_reverse(List *list) {
     list->head = prev;
 }
 
-void list_print(const List *list, DataType dataType) {
+void list_print(const List *list) {
     if (list_is_null_check(list, __func__)) return;
+
+    DataType dataType = list->dataType;
 
     printf("{");
 
     NodeList *current = list->head;
     while (current != NULL) {
         switch (dataType) {
-            case TYPE_INT_LL:
-                printf("%lld", *((long long *) (current->data)));
+            case TYPE_INT:
+                printf("%d", *((int *) (current->data))); // Integers
                 break;
-            case TYPE_REAL_D:
-                printf("%f", *((double *) (current->data)));
+            case TYPE_FLOAT:
+                printf("%f", *((float *) (current->data))); // Single-precision floats
                 break;
-            case TYPE_STRING:
-                printf("\"%s\"", (char *) (current->data));
+            case TYPE_DOUBLE:
+                printf("%lf", *((double *) (current->data))); // Double-precision floats
                 break;
             case TYPE_CHAR:
-                printf("'%c'", *((char *) (current->data)));
+                printf("'%c'", *((char *) (current->data))); // Characters
                 break;
             case TYPE_BOOL:
-                printf("%s", *((bool *) (current->data)) ? "true" : "false");
+                printf("%s", *((bool *) (current->data)) ? "true" : "false"); // Booleans
+                break;
+            case TYPE_SHORT:
+                printf("%hd", *((short *) (current->data))); // Short integers
+                break;
+            case TYPE_LONG:
+                printf("%ld", *((long *) (current->data))); // Long integers
+                break;
+            case TYPE_LONGLONG:
+                printf("%lld", *((long long *) (current->data))); // Long long integers
+                break;
+            case TYPE_STRING:
+                printf("\"%s\"", (char *) (current->data)); // Strings
                 break;
             default:
                 fprintf(stderr, "ERROR - Unknown data type\n");
@@ -197,6 +215,7 @@ void list_print(const List *list, DataType dataType) {
 
     printf("}\n");
 }
+
 
 size_t list_get_size(const List *list) {
     if (list_is_null_check(list, __func__)) return 0;

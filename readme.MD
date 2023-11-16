@@ -111,13 +111,13 @@ int main() {
     long long bar = 9;
     long long baz = 7;
 
-    List *list = list_create();
+    List *list = list_create(TYPE_LONGLONG);
     
     list_append(list, &foo);
     list_append(list, &bar);
     list_prepend(list, &baz);
     
-    list_print(list, TYPE_INT_LL);
+    list_print(list);
     
     list_destroy(list);
     

@@ -16,25 +16,31 @@ struct NodeList {
     NodeList *next;
 };
 
+typedef enum {
+    TYPE_INT,       // Represents an integer type
+    TYPE_FLOAT,     // Represents a single-precision floating point type
+    TYPE_DOUBLE,    // Represents a double-precision floating point type
+    TYPE_CHAR,      // Represents a character type
+    TYPE_BOOL,      // Represents a boolean type (true/false)
+    TYPE_SHORT,     // Represents a short integer type
+    TYPE_LONG,      // Represents a long integer type
+    TYPE_LONGLONG,  // Represents a long long integer type
+    TYPE_STRING     // Represents a string (array of characters)
+} DataType;
+
 typedef struct {
     size_t size;
     NodeList *head;
+    DataType dataType;
 } List;
 
-typedef enum {
-    TYPE_INT_LL,
-    TYPE_REAL_D,
-    TYPE_STRING,
-    TYPE_CHAR,
-    TYPE_BOOL
-} DataType;
 
 /**
  * Allocates and initializes a new list.
  *
  * @return Pointer to the newly created list, or NULL if memory allocation fails.
  */
-List *list_create();
+List *list_create(DataType dataType);
 
 /**
  * Deep copies the given list, duplicating each element.
@@ -104,7 +110,7 @@ void list_reverse(List *list);
  * @param list Pointer to the list to be printed.
  * @param dataType Type of data stored in the list nodes for appropriate formatting.
  */
-void list_print(const List *list, DataType dataType);
+void list_print(const List *list);
 
 /**
  * Retrieves the number of elements in the list.
