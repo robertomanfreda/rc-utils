@@ -25,8 +25,6 @@ intuitive and efficient manner.
 - CMake version 3.26 or higher
 - A C11-compatible compiler
 
-Certainly! Here's a revised version of the "Building the Project" section with an added subsection for executing tests:
-
 ---
 
 ### Building the Project
