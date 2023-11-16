@@ -107,7 +107,7 @@ void list_clear(List **list);
  *
  * @param list Pointer to the list where data will be appended.
  * @param data Pointer to the data to append.
- * @param data Indicate id data is dynamically allocated using malloc, calloc....
+ * @param isDynamicallyAllocated Indicate id data is dynamically allocated using malloc, calloc....
  */
 void list_append(List *list, void *data, bool isDynamicallyAllocated);
 
@@ -116,7 +116,7 @@ void list_append(List *list, void *data, bool isDynamicallyAllocated);
  *
  * @param list Pointer to the list where data will be prepended.
  * @param data Pointer to the data to prepend.
- * @param data Indicate id data is dynamically allocated using malloc, calloc....
+ * @param isDynamicallyAllocated Indicate id data is dynamically allocated using malloc, calloc....
  */
 void list_prepend(List *list, void *data, bool isDynamicallyAllocated);
 
