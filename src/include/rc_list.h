@@ -66,6 +66,28 @@ List *list_deep_copy(const List *source);
 void *list_get_element_at(const List *list, int index);
 
 /**
+ * Retrieves the first element of the list.
+ *
+ * This function returns the data stored in the first node of the list.
+ * If the list is NULL or empty, it returns NULL.
+ *
+ * @param list Pointer to the List from which the first element is to be retrieved.
+ * @return Pointer to the data of the first element, or NULL if the list is NULL or empty.
+ */
+void *list_get_first_element(const List *list);
+
+/**
+ * Retrieves the last element of the list.
+ *
+ * This function traverses the list to its end and returns the data stored in the last node.
+ * If the list is NULL or empty, it returns NULL.
+ *
+ * @param list Pointer to the List from which the last element is to be retrieved.
+ * @return Pointer to the data of the last element, or NULL if the list is NULL or empty.
+ */
+void *list_get_last_element(const List *list);
+
+/**
  * Destroys the list, freeing memory for all nodes and the list itself.
  *
  * @param list Pointer to the list to be destroyed.

@@ -89,6 +89,46 @@ void t_list_get_element_at_index_out_of_bounds() {
     mem_check();
 }
 
+void test_list_get_first_element() {
+    printf("Executing: %s\n", __func__);
+
+    List *list = list_create(TYPE_FLOAT);
+
+    list_append(list, &fData1);
+    assert(list_get_first_element(list) == &fData1);
+    list_print(list);
+
+    list_append(list, &fData2);
+    assert(list_get_first_element(list) == &fData1);
+    list_print(list);
+
+    list_prepend(list, &fData3);
+    assert(list_get_first_element(list) == &fData3);
+    list_print(list);
+
+    list_destroy(list);
+
+    mem_check();
+}
+
+void test_list_get_last_element() {
+    printf("Executing: %s\n", __func__);
+
+    List *list = list_create(TYPE_FLOAT);
+
+    list_append(list, &fData1);
+    assert(list_get_last_element(list) == &fData1);
+    list_print(list);
+
+    list_append(list, &fData2);
+    assert(list_get_last_element(list) == &fData2);
+    list_print(list);
+
+    list_destroy(list);
+
+    mem_check();
+}
+
 void test_list_destroy() {
     printf("Executing: %s\n", __func__);
 
@@ -276,7 +316,7 @@ void t_list_get_size() {
         list_append(list, &i);
     }
 
-    assert(list->size == 10);
+    assert(list_get_size(list) == 10);
 
     list_print(list);
 
@@ -294,6 +334,9 @@ int main() {
 
     t_list_get_element_at();
     t_list_get_element_at_index_out_of_bounds();
+
+    test_list_get_first_element();
+    test_list_get_last_element();
 
     test_list_destroy();
 

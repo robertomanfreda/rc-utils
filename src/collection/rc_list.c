@@ -63,6 +63,26 @@ void *list_get_element_at(const List *list, int index) {
     return current->data;
 }
 
+void *list_get_first_element(const List *list) {
+    if (list_is_null_check(list, __func__)) return NULL;
+    if (list_is_empty_check(list, __func__)) return NULL;
+
+    return list->head->data;
+}
+
+// TODO in a future implementation add "tail" to access last elem in O(1);
+void *list_get_last_element(const List *list) {
+    if (list_is_null_check(list, __func__)) return NULL;
+    if (list_is_empty_check(list, __func__)) return NULL;
+
+    NodeList *current = list->head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    return current->data;
+}
+
 void list_destroy(List *list) {
     if (list_is_null_check(list, __func__)) return;
 
