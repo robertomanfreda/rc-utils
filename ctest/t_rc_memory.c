@@ -44,6 +44,8 @@ void test_memory_allocation_and_freeing() {
 }
 
 int main() {
+    printf("Executing tests from file: %s\n\n", __FILE_NAME__);
+
     test_memory_malloc();
     test_memory_free();
     test_memory_allocation_and_freeing();
