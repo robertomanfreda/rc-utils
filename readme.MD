@@ -109,13 +109,16 @@ Example:
 int main() {
     long long foo = 8;
     long long bar = 9;
-    long long baz = 7;
+    
+    long long *baz = memory_malloc(sizeof(long long));
+    if (baz == NULL) exit(1);
+    *baz = 10;
 
     List *list = list_create(TYPE_LONGLONG);
     
-    list_append(list, &foo);
-    list_append(list, &bar);
-    list_prepend(list, &baz);
+    list_append(list, &foo, false);
+    list_append(list, &bar, false);
+    list_prepend(list, &baz, true); // Dynamically allocated
     
     list_print(list);
     
