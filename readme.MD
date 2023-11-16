@@ -91,9 +91,6 @@ unit tests, follow these steps to compile and run them after building the projec
 
 ---
 
-This revised documentation provides clear instructions for both building the project and running the unit tests,
-ensuring that users and developers can easily compile and verify the project.
-
 ### Usage
 
 Include the desired headers from the `rc-utils` library in your C project and link against the `rc-utils` library.
