@@ -3,6 +3,7 @@
 //
 
 #include <stdio.h>
+#include <string.h>
 #include "../include/rc_list.h"
 #include "../include/rc_memory.h"
 
@@ -36,7 +37,7 @@ List *list_deep_copy(const List *source) {
     NodeList *current = source->head;
     while (current != NULL) {
         // Append the data of the current node of the source list to the new list
-        list_append(copy, current->data);
+        list_append(copy, current->data, current->isDynamicallyAllocated);
         current = current->next;
     }
 
@@ -86,17 +87,57 @@ void *list_get_last_element(const List *list) {
 void list_destroy(List *list) {
     if (list_is_null_check(list, __func__)) return;
 
-    // Iterate through the list and free each node
+    // Iterate through the list and free each node and its data
     NodeList *current = list->head;
     while (current != NULL) {
         NodeList *temp = current;
         current = current->next;
+
+        if (temp->data != NULL && temp->isDynamicallyAllocated) {
+            // Determine the size of the data to free
+            size_t dataSize;
+
+            switch (list->dataType) {
+                case TYPE_INT:
+                    dataSize = sizeof(int);
+                    break;
+                case TYPE_FLOAT:
+                    dataSize = sizeof(float);
+                    break;
+                case TYPE_DOUBLE:
+                    dataSize = sizeof(double);
+                    break;
+                case TYPE_CHAR:
+                    dataSize = sizeof(char);
+                    break;
+                case TYPE_BOOL:
+                    dataSize = sizeof(bool);
+                    break;
+                case TYPE_SHORT:
+                    dataSize = sizeof(short);
+                    break;
+                case TYPE_LONG:
+                    dataSize = sizeof(long);
+                    break;
+                case TYPE_LONGLONG:
+                    dataSize = sizeof(long long);
+                    break;
+                case TYPE_STRING:
+                    dataSize = strlen((char *) temp->data) + 1;
+                    break;
+                default:
+                    fprintf(stderr, "ERROR - Unknown data type\n");
+                    exit(1);
+            }
+
+            memory_free(temp->data, dataSize);
+        }
+
         memory_free(temp, sizeof(NodeList)); // Free the node
     }
 
     // Free the list structure itself
     memory_free(list, sizeof(List));
-    list = NULL;
 }
 
 void list_clear(List **list) {
@@ -110,7 +151,7 @@ void list_clear(List **list) {
     *list = list_create(dataType);  // Re-create the list and update the original pointer
 }
 
-void list_append(List *list, void *data) {
+void list_append(List *list, void *data, bool isDynamicallyAllocated) {
     if (list_is_null_check(list, __func__)) return;
 
     NodeList *node = (NodeList *) memory_malloc(sizeof(NodeList));
@@ -121,6 +162,7 @@ void list_append(List *list, void *data) {
     }
 
     node->data = data;
+    node->isDynamicallyAllocated = isDynamicallyAllocated;
     node->next = NULL;
 
     // If the list is empty, make the new node the head
@@ -138,7 +180,7 @@ void list_append(List *list, void *data) {
     list->size++;
 }
 
-void list_prepend(List *list, void *data) {
+void list_prepend(List *list, void *data, bool isDynamicallyAllocated) {
     if (list_is_null_check(list, __func__)) return;
     if (list_is_empty_check(list, __func__)) return;
 
@@ -151,6 +193,7 @@ void list_prepend(List *list, void *data) {
 
     // Set the node's data and previous pointer
     node->data = data;
+    node->isDynamicallyAllocated = isDynamicallyAllocated;
     node->previous = NULL;
 
     // Set the new node's next pointer to the current head and update the head

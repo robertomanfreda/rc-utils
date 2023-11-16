@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "rc_list.h"
 #include "t_utils.h"
+#include "rc_memory.h"
 
 void test_list_create() {
     printf("Executing: %s\n", __func__);
@@ -27,8 +28,8 @@ void test_list_deep_copy() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_LONGLONG);
-    list_append(list, &llData1);
-    list_append(list, &llData2);
+    list_append(list, &llData1, false);
+    list_append(list, &llData2, false);
 
     assert(list != NULL);
     assert(list->size == 2);
@@ -54,11 +55,11 @@ void t_list_get_element_at() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_FLOAT);
-    list_append(list, &fData2);
-    list_append(list, &fData3);
-    list_append(list, &fData4);
-    list_append(list, &fData5);
-    list_prepend(list, &fData1);
+    list_append(list, &fData2, false);
+    list_append(list, &fData3, false);
+    list_append(list, &fData4, false);
+    list_append(list, &fData5, false);
+    list_prepend(list, &fData1, false);
 
     assert(list_get_element_at(list, 0) == &fData1);
     assert(list_get_element_at(list, 1) == &fData2);
@@ -77,7 +78,7 @@ void t_list_get_element_at_index_out_of_bounds() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_FLOAT);
-    list_append(list, &fData1);
+    list_append(list, &fData1, false);
 
     assert(list_get_element_at(list, 0) == &fData1);
     assert(list_get_element_at(list, 1) == NULL);
@@ -94,15 +95,15 @@ void test_list_get_first_element() {
 
     List *list = list_create(TYPE_FLOAT);
 
-    list_append(list, &fData1);
+    list_append(list, &fData1, false);
     assert(list_get_first_element(list) == &fData1);
     list_print(list);
 
-    list_append(list, &fData2);
+    list_append(list, &fData2, false);
     assert(list_get_first_element(list) == &fData1);
     list_print(list);
 
-    list_prepend(list, &fData3);
+    list_prepend(list, &fData3, false);
     assert(list_get_first_element(list) == &fData3);
     list_print(list);
 
@@ -116,11 +117,11 @@ void test_list_get_last_element() {
 
     List *list = list_create(TYPE_FLOAT);
 
-    list_append(list, &fData1);
+    list_append(list, &fData1, false);
     assert(list_get_last_element(list) == &fData1);
     list_print(list);
 
-    list_append(list, &fData2);
+    list_append(list, &fData2, false);
     assert(list_get_last_element(list) == &fData2);
     list_print(list);
 
@@ -133,11 +134,11 @@ void test_list_destroy() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_STRING);
-    list_append(list, (char *) sData1);
-    list_append(list, (char *) sData2);
-    list_append(list, (char *) sData3);
-    list_append(list, (char *) sData4);
-    list_append(list, (char *) sData5);
+    list_append(list, (char *) sData1, false);
+    list_append(list, (char *) sData2, false);
+    list_append(list, (char *) sData3, false);
+    list_append(list, (char *) sData4, false);
+    list_append(list, (char *) sData5, false);
 
     list_print(list);
 
@@ -150,8 +151,8 @@ void test_list_clear() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_STRING);
-    list_append(list, (char *) sData1);
-    list_append(list, (char *) sData2);
+    list_append(list, (char *) sData1, false);
+    list_append(list, (char *) sData2, false);
     list_print(list);
 
     list_clear(&list);
@@ -169,7 +170,7 @@ void test_list_append_empty() {
 
     List *list = list_create(TYPE_CHAR);
 
-    list_append(list, &cData1);
+    list_append(list, &cData1, false);
 
     assert(list->size == 1);
     assert(list->head != NULL);
@@ -188,8 +189,8 @@ void test_list_append_non_empty() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_BOOL);
-    list_append(list, &bDataTrue);
-    list_append(list, &bDataFalse);
+    list_append(list, &bDataTrue, false);
+    list_append(list, &bDataFalse, false);
 
     assert(list->size == 2);
     assert(list->head != NULL);
@@ -208,7 +209,7 @@ void test_list_prepend_empty() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_LONGLONG);
-    list_prepend(list, &llData1);
+    list_prepend(list, &llData1, false);
 
     assert(list->size == 0);
     assert(list->head == NULL);
@@ -224,8 +225,8 @@ void test_list_prepend_non_empty() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_LONGLONG);
-    list_append(list, &llData1);
-    list_prepend(list, &llData2);
+    list_append(list, &llData1, false);
+    list_prepend(list, &llData2, false);
 
     assert(list->size == 2);
     assert(list->head != NULL);
@@ -245,10 +246,10 @@ void t_list_reverse() {
     printf("Executing: %s\n", __func__);
 
     List *list = list_create(TYPE_FLOAT);
-    list_append(list, &fData1);
-    list_append(list, &fData2);
-    list_append(list, &fData3);
-    list_append(list, &fData4);
+    list_append(list, &fData1, false);
+    list_append(list, &fData2, false);
+    list_append(list, &fData3, false);
+    list_append(list, &fData4, false);
 
     assert(list_get_element_at(list, 0) == &fData1);
     assert(list_get_element_at(list, 1) == &fData2);
@@ -276,8 +277,8 @@ void t_list_is_empty() {
 
     assert(list_is_empty(list) == true);
 
-    list_append(list, &lData1);
-    list_prepend(list, &lData2);
+    list_append(list, &lData1, false);
+    list_prepend(list, &lData2, false);
 
     assert(list_is_empty(list) == false);
 
@@ -295,8 +296,8 @@ void t_list_is_not_empty() {
 
     assert(list_is_not_empty(list) == false);
 
-    list_append(list, &lData1);
-    list_prepend(list, &lData2);
+    list_append(list, &lData1, false);
+    list_prepend(list, &lData2, false);
 
     assert(list_is_not_empty(list) == true);
 
@@ -313,8 +314,16 @@ void t_list_get_size() {
     List *list = list_create(TYPE_INT);
 
     for (int i = 0; i < 10; ++i) {
-        list_append(list, &i);
+        int *value = memory_malloc(sizeof(int));
+
+        if (value == NULL) {
+            // Handle memory allocation failure
+            exit(1);
+        }
+        *value = i;
+        list_append(list, value, true);
     }
+
 
     assert(list_get_size(list) == 10);
 
