@@ -24,15 +24,23 @@ void memory_free(void *ptr, size_t size) {
     free(ptr);
 }
 
-void memory_print_usage(const char *custom_marker) {
+void memory_print_usage(const char *customMarker) {
     const char *msg = "-------------- Memory Report: %s --------------";
-    printf(msg, custom_marker);
+    printf(msg, customMarker);
     printf("\n");
     printf(" + Total Allocated Memory: %zu bytes\n", totalAllocated);
     printf(" + Total Freed Memory: %zu bytes\n", totalFreed);
     printf(" + Net Memory Usage: %zu bytes\n", totalAllocated - totalFreed);
-    for (size_t i = 0; i < strlen(msg) + strlen(custom_marker) - 2; i++) {
+    for (size_t i = 0; i < strlen(msg) + strlen(customMarker) - 2; i++) {
         printf("-");
     }
     printf("\n");
+}
+
+size_t memory_get_allocated() {
+    return totalAllocated;
+}
+
+size_t memory_get_freed() {
+    return totalFreed;
 }

@@ -11,7 +11,7 @@ List *list_create() {
 
     if (list == NULL) {
         fprintf(stderr, "ERROR - %s: Unable to allocate memory.\n", __func__);
-        exit(1); // Exit if allocation failed
+        return NULL;
     }
 
     list->size = 0;
@@ -21,16 +21,14 @@ List *list_create() {
 }
 
 List *list_deep_copy(const List *source) {
-    if (source == NULL) {
-        fprintf(stderr, "WARN - %s: The source list is NULL.\n", __func__);
-        return NULL; // Return NULL if the source list is NULL
-    }
+    if (list_is_null_check(source, __func__)) return NULL;
+    if (list_is_empty_check(source, __func__)) return NULL;
 
     // Create a new list
     List *copy = list_create();
     if (copy == NULL) {
         fprintf(stderr, "ERROR - %s: Unable to allocate memory for list.\n", __func__);
-        exit(1); // Return NULL if memory allocation for the new list fails
+        return NULL;
     }
 
     // Iterate through the source list and copy each node
@@ -45,10 +43,7 @@ List *list_deep_copy(const List *source) {
 }
 
 void list_destroy(List *list) {
-    // Return immediately if the list is NULL
-    if (list == NULL) {
-        return;
-    }
+    if (list_is_null_check(list, __func__)) return;
 
     // Iterate through the list and free each node
     NodeList *current = list->head;
@@ -60,18 +55,20 @@ void list_destroy(List *list) {
 
     // Free the list structure itself
     memory_free(list, sizeof(List));
+    list = NULL;
 }
 
 void list_clear(List **list) {
-    if (list == NULL || *list == NULL) {
-        return; // Safety check
-    }
+    if (list_is_null_check(*list, __func__)) return;
+    if (list_is_empty_check(*list, __func__)) return;
 
     list_destroy(*list);    // Free the entire list
     *list = list_create();  // Re-create the list and update the original pointer
 }
 
-void list_append(List *list, int data) {
+void list_append(List *list, void *data) {
+    if (list_is_null_check(list, __func__)) return;
+
     NodeList *node = (NodeList *) memory_malloc(sizeof(NodeList));
 
     if (node == NULL) {
@@ -97,7 +94,10 @@ void list_append(List *list, int data) {
     list->size++;
 }
 
-void list_prepend(List *list, int data) {
+void list_prepend(List *list, void *data) {
+    if (list_is_null_check(list, __func__)) return;
+    if (list_is_empty_check(list, __func__)) return;
+
     NodeList *node = (NodeList *) memory_malloc(sizeof(NodeList));
 
     if (node == NULL) {
@@ -123,10 +123,7 @@ void list_prepend(List *list, int data) {
 }
 
 bool list_is_empty(const List *list) {
-    if (list == NULL) {
-        fprintf(stderr, "WARN - %s: The list is NULL.\n", __func__);
-        return NULL;
-    }
+    if (list_is_null_check(list, __func__)) return NULL;
 
     return list->head == NULL
            ? true
@@ -134,10 +131,7 @@ bool list_is_empty(const List *list) {
 }
 
 bool list_is_not_empty(const List *list) {
-    if (list == NULL) {
-        fprintf(stderr, "WARN - %s: The list is NULL.\n", __func__);
-        return NULL;
-    }
+    if (list_is_null_check(list, __func__)) return NULL;
 
     return list->head != NULL
            ? true
@@ -145,13 +139,8 @@ bool list_is_not_empty(const List *list) {
 }
 
 void list_reverse(List *list) {
-    if (list == NULL) {
-        fprintf(stderr, "WARN - %s: The list is NULL.\n", __func__);
-        return;
-    } else if (list_is_empty(list)) {
-        fprintf(stderr, "WARN - %s: The list is EMPTY.\n", __func__);
-        return;
-    }
+    if (list_is_null_check(list, __func__)) return;
+    if (list_is_empty_check(list, __func__)) return;
 
     NodeList *current = list->head;
     NodeList *prev = NULL;
@@ -172,44 +161,52 @@ void list_reverse(List *list) {
     list->head = prev;
 }
 
-void list_print(const List *list) {
-    // Check if the list is NULL and return if so
-    if (list == NULL) {
-        fprintf(stderr, "WARN - %s: The list is NULL.\n", __func__);
-        return;
-    }
+void list_print(const List *list, DataType dataType) {
+    if (list_is_null_check(list, __func__)) return;
 
-    // Iterate through the list and print each node's data
+    printf("{");
+
     NodeList *current = list->head;
     while (current != NULL) {
-        printf("%d ", current->data);
+        switch (dataType) {
+            case TYPE_INT_LL:
+                printf("%lld", *((long long *) (current->data)));
+                break;
+            case TYPE_REAL_D:
+                printf("%f", *((double *) (current->data)));
+                break;
+            case TYPE_STRING:
+                printf("\"%s\"", (char *) (current->data));
+                break;
+            case TYPE_CHAR:
+                printf("'%c'", *((char *) (current->data)));
+                break;
+            case TYPE_BOOL:
+                printf("%s", *((bool *) (current->data)) ? "true" : "false");
+                break;
+            default:
+                fprintf(stderr, "ERROR - Unknown data type\n");
+                return; // Return from the function on unknown type
+        }
+
         current = current->next;
+        if (current != NULL) {
+            printf(", ");
+        }
     }
 
-    // Print a newline for formatting
-    printf("\n");
+    printf("}\n");
 }
 
 size_t list_get_size(const List *list) {
-    if (list == NULL) {
-        fprintf(stderr, "WARN - %s: The list is NULL.\n", __func__);
-        return 0; // Return NULL if the list is NULL
-    } else if (list_is_empty(list)) {
-        fprintf(stderr, "WARN - %s: The list is EMPTY.\n", __func__);
-        return 0; // Return NULL if the list is empty
-    }
+    if (list_is_null_check(list, __func__)) return 0;
 
-    return list->size;
+    return list_is_empty(list) ? 0 : list->size;
 }
 
 static NodeList *list_get_last_node(const List *list) {
-    if (list == NULL) {
-        fprintf(stderr, "WARN - %s: The list is NULL.\n", __func__);
-        return NULL; // Return NULL if the list is NULL
-    } else if (list_is_empty(list)) {
-        fprintf(stderr, "WARN - %s: The list is EMPTY.\n", __func__);
-        return NULL; // Return NULL if the list is empty
-    }
+    if (list_is_null_check(list, __func__)) return NULL;
+    if (list_is_empty_check(list, __func__)) return NULL;
 
     NodeList *current = list->head;
     while (current->next != NULL) {
@@ -217,4 +214,22 @@ static NodeList *list_get_last_node(const List *list) {
     }
 
     return current; // Return the last node
+}
+
+static bool list_is_null_check(const List *list, const char *funcName) {
+    if (list == NULL) {
+        fprintf(stdout, "WARN - %s: The list is NULL.\n", funcName);
+        return true;
+    }
+
+    return false;
+}
+
+static bool list_is_empty_check(const List *list, const char *funcName) {
+    if (list_is_empty(list)) {
+        fprintf(stdout, "WARN - %s: The list is EMPTY.\n", funcName);
+        return true;
+    }
+
+    return false;
 }

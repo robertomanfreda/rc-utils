@@ -11,7 +11,7 @@
 typedef struct NodeList NodeList;
 
 struct NodeList {
-    int data;
+    void *data;
     NodeList *previous;
     NodeList *next;
 };
@@ -21,158 +21,124 @@ typedef struct {
     NodeList *head;
 } List;
 
+typedef enum {
+    TYPE_INT_LL,
+    TYPE_REAL_D,
+    TYPE_STRING,
+    TYPE_CHAR,
+    TYPE_BOOL
+} DataType;
+
 /**
- * Creates a new list and initializes its size and head.
+ * Allocates and initializes a new list.
  *
- * @return a pointer to the newly created list.
+ * @return Pointer to the newly created list, or NULL if memory allocation fails.
  */
 List *list_create();
 
 /**
- * Creates a deep copy of the provided list.
- * Each element of the source list is copied to a new list.
+ * Deep copies the given list, duplicating each element.
  *
- * @param source A pointer to the list to be copied.
- * @return A pointer to the newly created list which is a deep copy of the source list.
- *         Returns NULL if the source list is NULL or if memory allocation fails.
+ * @param source Pointer to the source list to be copied.
+ * @return Pointer to the new list (deep copy of source), or NULL if the source is NULL or memory allocation fails
+ * or NULL if the source is empty.
  */
 List *list_deep_copy(const List *source);
 
 /**
- * Frees the memory allocated for the list and all its nodes.
+ * Destroys the list, freeing memory for all nodes and the list itself.
  *
- * @param list a pointer to the list to be destroyed.
+ * @param list Pointer to the list to be destroyed.
  */
 void list_destroy(List *list);
 
 /**
- * Clears the contents of the provided list and re-initializes it.
- * The function frees all the nodes in the list and then creates a new, empty list.
+ * Clears and re-initializes a list, freeing all nodes and creating a new empty list.
  *
- * @param list A pointer to a pointer to the list. This allows the function
- *             to modify the caller's list pointer directly.
- *             If the pointer to the list or the list itself is NULL, the function does nothing.
+ * @param list Double pointer to the list, allowing direct modification of the caller's list pointer.
  */
 void list_clear(List **list);
 
 /**
- * Appends a new node with the given data to the end of the list.
+ * Appends data to the end of the list by adding a new node.
  *
- * @param list a pointer to the list where to append data.
- * @param data the data to be appended.
+ * @param list Pointer to the list where data will be appended.
+ * @param data Pointer to the data to append.
  */
-void list_append(List *list, int data);
+void list_append(List *list, void *data);
 
 /**
- * Inserts a new node with the given data at the beginning of the list.
+ * Prepends data to the beginning of the list by adding a new node.
  *
- * @param list a pointer to the list where to prepend data.
- * @param data the data to be appended.
+ * @param list Pointer to the list where data will be prepended.
+ * @param data Pointer to the data to prepend.
  */
-void list_prepend(List *list, int data);
+void list_prepend(List *list, void *data);
 
 /**
- * Checks if the provided list is empty.
- * An empty list is defined as one whose head pointer is NULL,
- * indicating that it contains no elements.
+ * Checks whether the list is empty (no elements).
  *
- * @param list A pointer to the list to be checked. It should not be NULL.
- * @return Returns true if the list is empty (i.e., has no elements),
- *         false otherwise.
+ * @param list Pointer to the list to check.
+ * @return True if the list is empty, false otherwise.
  */
 bool list_is_empty(const List *list);
 
 /**
- * Checks if the provided list is not empty.
- * A non-empty list is defined as one whose head pointer is not NULL,
- * indicating that it contains at least one element.
+ * Checks whether the list is not empty (has elements).
  *
- * @param list A pointer to the list to be checked. It should not be NULL.
- * @return Returns true if the list is not empty (i.e., has one or more elements),
- *         false if it is empty.
+ * @param list Pointer to the list to check.
+ * @return True if the list is not empty, false otherwise.
  */
 bool list_is_not_empty(const List *list);
 
 /**
- * Reverses the order of the nodes in the provided list.
- * The head of the list becomes the tail and vice versa.
+ * Reverses the order of nodes in the list.
  *
- * @param list A pointer to the list to be reversed.
+ * @param list Pointer to the list to be reversed.
  */
 void list_reverse(List *list);
 
 /**
- * Prints the data of each node in the list.
+ * Prints the data of each node in the list in a formatted manner.
  *
- * @param list a pointer to the list to be printed.
+ * @param list Pointer to the list to be printed.
+ * @param dataType Type of data stored in the list nodes for appropriate formatting.
  */
-void list_print(const List *list);
+void list_print(const List *list, DataType dataType);
 
 /**
- * Retrieves the size (number of elements) of the provided list.
- * If the list is NULL or empty, an error message is printed and 0 is returned.
+ * Retrieves the number of elements in the list.
  *
- * @param list A pointer to the list whose size is to be retrieved.
- * @return The number of elements in the list.
- *         Returns 0 if the list is NULL or empty.
+ * @param list Pointer to the list.
+ * @return Size of the list, or 0 if the list is NULL or empty.
  */
 size_t list_get_size(const List *list);
 
 /**
- * Returns the last node in the list.
+ * Retrieves the last node of the list.
  *
- * @param list pointer to the list.
- * @return NULL if the list is empty or the last NodeList pointer.
+ * @param list Pointer to the list.
+ * @return Pointer to the last node of the list, or NULL if the list is empty.
  */
 static NodeList *list_get_last_node(const List *list);
-/*
 
- // Insertion
-void list_insert_at_index(List *list, int value, size_t index);
-
-
-// Retrieval
-int list_get_head(List *list);
-
-int list_get_tail(List *list);
-
-int list_get_at_index(List *list, int index);
-
-size_t list_get_index_of(List *list, int value);
-
-
-// Deletion
-void list_remove_first_occurrence(List *list, int value);
-
-void list_remove_all_occurrences(List *list, int value);
-
-void list_remove_head(List *list);
-
-void list_remove_tail(List *list);
-
-void list_remove_at_index(List *list, size_t index);
-
-
-// Search Function
-int list_contains(List *list, int value);
-
-
-// Concatenation
-List *list_concatenate(const List *list1, const List *list2);
-
-
-// Replacement
-void list_replace_at_index(List *list, int value, int index);
-
-
-// Sorting
-void list_sort_ascending(List *list);
-
-void list_sort_descending(List *list);
-
-
-// Reduction
-void list_get_sublist(List *list);
+/**
+ * Checks if the provided list pointer is NULL.
+ *
+ * @param list Pointer to the list to be checked.
+ * @param funcName Name of the calling function, for error messaging.
+ * @return True if the list is NULL, false otherwise.
  */
+static bool list_is_null_check(const List *list, const char *funcName);
+
+/**
+ * Checks if the provided list is empty.
+ *
+ * @param list Pointer to the list to be checked.
+ * @param funcName Name of the calling function, for error messaging.
+ * @return True if the list is empty, false otherwise.
+ */
+static bool list_is_empty_check(const List *list, const char *funcName);
+
 
 #endif //RCUTILS_RC_LIST_H

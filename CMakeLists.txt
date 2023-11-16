@@ -1,11 +1,18 @@
 cmake_minimum_required(VERSION 3.26)
-project(rcutils C)
+project(rcutils_lib C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(rcutils main.c
+# Add the include directory for header files
+include_directories(src/include)
+
+add_library(
+        rcutils_lib
         src/collection/rc_list.c
-        src/include/rc_list.h
         src/memory/rc_memory.c
-        src/include/rc_memory.h
 )
+
+target_link_libraries(rcutils_lib)
+
+add_subdirectory(ctest)
+enable_testing()
